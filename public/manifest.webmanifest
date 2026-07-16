@@ -1,0 +1,18 @@
+{
+  "name": "BiBu遊・北海道自駕行程",
+  "short_name": "BiBu遊",
+  "description": "BiBu遊 2026 北海道 7日6夜自駕行程 dashboard",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf3df",
+  "theme_color": "#d97954",
+  "lang": "zh-HK",
+  "icons": [
+    {
+      "src": "/assets/bibu-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
