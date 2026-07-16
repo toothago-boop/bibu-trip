@@ -1,107 +1,30 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#d97954">
-  <meta name="description" content="BiBu遊北海道7日6夜旅行手帳：即時編輯、離線使用、路線及泊車資訊。">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="assets/bibu-icon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
-  <title>BiBu遊｜北海道旅行手帳</title>
-</head>
-<body>
-  <header class="topbar">
-    <a class="brand" href="#home" aria-label="BiBu遊首頁"><span class="brand-dot">び</span><span>BiBu遊</span></a>
-    <div class="top-actions">
-      <span class="sync-status" id="syncStatus">● 本機儲存</span>
-      <button class="icon-btn" id="cloudButton" type="button">Google 登入</button>
-    </div>
-  </header>
-
-  <main class="shell">
-    <section class="hero" id="home">
-      <div class="hero-copy">
-        <span class="kicker">HOKKAIDO · 2026 SUMMER</span>
-        <h1>北海道<br><em>7日6夜自由行</em></h1>
-        <p>札幌・小樽・富良野・美瑛<br>2026.7.26 — 8.1</p>
-        <div class="hero-pills"><span>✈️ ANA</span><span>🚗 3日自駕</span><span>🏨 兩間酒店</span><span>📴 離線可用</span></div>
-        <div class="trip-status"><small>TRIP STATUS</small><strong id="tripStatus">計算中…</strong><span id="todayHint"></span></div>
-        <div class="hero-actions"><button class="btn primary" data-go="days" type="button">查看每日行程</button><button class="btn" data-go="planner" type="button">即時修改行程</button></div>
-      </div>
-      <figure class="poster-frame"><img src="assets/bibu-poster.png" alt="BiBu遊北海道7日6夜手繪行程海報" width="1054" height="1492"><figcaption>BiBu遊 · 北海道旅行手帳</figcaption></figure>
-    </section>
-
-    <section class="quick-grid" aria-label="旅程摘要">
-      <article><span>🗓️</span><b>7日</b><small>7/26—8/1</small></article>
-      <article><span>🗺️</span><b>4地</b><small>札幌・小樽・富良野・美瑛</small></article>
-      <article><span>🚘</span><b>3日</b><small>富良野・美瑛自駕</small></article>
-      <article><span>✈️</span><b>21:40</b><small>8/1 新千歲回程</small></article>
-    </section>
-
-    <section class="paper-section" id="days">
-      <div class="section-head"><div><span class="kicker">DAILY PLAN</span><h2>每日行程</h2><p>切換日子，即時睇時間、路程與泊車提示。</p></div><button class="btn primary" id="addEventButton" type="button">＋ 加入行程</button></div>
-      <div class="day-tabs" id="dayTabs" role="tablist"></div>
-      <div id="dayView"></div>
-    </section>
-
-    <section class="paper-section" id="planner">
-      <div class="section-head"><div><span class="kicker">SMART PLANNER</span><h2>時間檢查</h2><p>按預設／自訂路程時間，檢查兩站之間夠唔夠時間。</p></div><button class="btn" id="resetButton" type="button">還原預設行程</button></div>
-      <div class="notice warm">💡 免費模式唔會在網站內讀取即時交通。按「行路」或「行車」會直接開啟 Google Maps，顯示當刻路線與時間。</div>
-      <div class="warning-list" id="warningList"></div>
-    </section>
-
-    <section class="paper-section" id="places">
-      <div class="section-head"><div><span class="kicker">PLACES</span><h2>景點與餐廳</h2><p>地圖、官方資料及泊車資訊集中一頁。</p></div></div>
-      <input class="search" id="placeSearch" type="search" placeholder="搜尋景點、餐廳、地區…" aria-label="搜尋地點">
-      <div class="filter-row" id="placeFilters"></div>
-      <div class="places-grid" id="placesGrid"></div>
-    </section>
-
-    <section class="paper-section" id="essentials">
-      <div class="section-head"><div><span class="kicker">TRIP KIT</span><h2>重要資料</h2><p>航班、住宿、Checklist與個人備忘。</p></div></div>
-      <div class="two-col">
-        <article class="info-card"><h3>✈️ 航班</h3><div class="compact-list" id="flightList"></div></article>
-        <article class="info-card"><h3>🏨 住宿</h3><div class="compact-list" id="hotelList"></div></article>
-      </div>
-      <div class="two-col">
-        <article class="info-card"><h3>✅ Checklist</h3><div id="checklist"></div></article>
-        <article class="info-card"><h3>📝 個人備忘</h3><textarea id="notes" class="notes" placeholder="預約號碼、想買嘅嘢、臨時改動…"></textarea><small id="saveHint">自動儲存於此裝置</small></article>
-      </div>
-      <details class="info-card backup"><summary>轉移／備份自訂行程</summary><textarea id="backupData" class="notes short" placeholder="備份文字會顯示在這裡"></textarea><div class="button-row"><button class="btn" id="exportButton" type="button">產生備份</button><button class="btn primary" id="importButton" type="button">匯入備份</button></div></details>
-    </section>
-  </main>
-
-  <nav class="bottom-nav" aria-label="主要導覽">
-    <button class="active" data-go="home"><span>⌂</span>首頁</button>
-    <button data-go="days"><span>▤</span>行程</button>
-    <button data-go="planner"><span>◷</span>時間</button>
-    <button data-go="places"><span>⌖</span>地點</button>
-    <button data-go="essentials"><span>✓</span>資料</button>
-  </nav>
-
-  <dialog id="eventDialog">
-    <form id="eventForm" method="dialog">
-      <div class="dialog-head"><div><span class="kicker">EDIT PLAN</span><h2 id="dialogTitle">加入行程</h2></div><button class="close-btn" type="button" data-close aria-label="關閉">×</button></div>
-      <input id="eventId" type="hidden">
-      <div class="form-grid">
-        <label>日子<select id="eventDay" required></select></label>
-        <label>時間<input id="eventTime" type="time" required></label>
-        <label class="full">名稱<input id="eventTitle" required placeholder="例如：富良野甜品店"></label>
-        <label class="full">詳情<textarea id="eventDesc" placeholder="地址、預約、注意事項…"></textarea></label>
-        <label>分類<select id="eventTag"><option>景點</option><option>餐廳</option><option>購物</option><option>住宿</option><option>交通</option><option>其他</option></select></label>
-        <label>地圖搜尋名稱<input id="eventPlace" placeholder="Google Maps 地點名稱"></label>
-        <label>由上一站所需時間（分鐘）<input id="eventTravel" type="number" min="0" max="600" value="0"></label>
-        <label>主要交通<select id="eventMode"><option value="walking">行路</option><option value="driving">行車</option><option value="transit">公共交通</option></select></label>
-      </div>
-      <div class="dialog-actions"><button class="btn" type="button" data-close>取消</button><button class="btn primary" id="saveEventButton" value="default">儲存行程</button></div>
-    </form>
-  </dialog>
-
-  <div class="toast" id="toast" role="status"></div>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
-  <script type="module" src="cloud-sync.js"></script>
-</body>
-</html>
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "/sw.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

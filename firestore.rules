@@ -1,5 +1,10 @@
-{
-  "projects": {
-    "default": "bibu-1d00a"
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/trips/{tripId} {
+      allow read, create, update, delete: if request.auth != null
+        && request.auth.uid == userId;
+    }
   }
 }
