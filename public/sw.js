@@ -1,4 +1,4 @@
-const CACHE='bibu-trip-v3';
+const CACHE='bibu-trip-v4';
 const CORE=[
   '/',
   '/index.html',
