@@ -34,7 +34,7 @@ function save({notify=true}={}){state.updatedAt=Date.now();localStorage.setItem(
 function showToast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),1900)}
 function mapsSearch(q){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q)}
 function mapsDir(a,b,mode){return 'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b)+'&travelmode='+mode}
-function tabelogSearch(q){return 'https://www.google.com/search?q='+encodeURIComponent('site:tabelog.com '+q)}
+function tabelogSearch(q){return 'https://tabelog.com/hokkaido/rstLst/?vs=1&sa=&sk='+encodeURIComponent(q)}
 function minutes(time){const [h,m]=String(time).split(':').map(Number);return h*60+m}
 function day(){return state.days.find(d=>d.n===activeDay)||state.days[0]}
 
@@ -90,7 +90,7 @@ function restaurantAddress(t){return [t['addr:postcode'],t['addr:city']||t['addr
 function restaurantLabel(t){return t['name:zh-Hant']||t['name:zh']||t['name:en']||t.name||t['name:ja']||''}
 function updateFinderLinks(){const area=restaurantArea(),word=$('#restaurantKeyword').value.trim()||'餐廳';$('#finderMapsLink').href=mapsSearch(`${word} near ${area.label} Hokkaido`);$('#finderTabelogLink').href=tabelogSearch(`${area.label} ${word}`)}
 function renderRestaurantResults(){
-  $('#restaurantResults').innerHTML=restaurantResults.length?restaurantResults.map((r,i)=>`<article class="restaurant-card"><div class="restaurant-card-top"><span class="finder-badge">${r.distance<1?Math.round(r.distance*1000)+' m':r.distance.toFixed(1)+' km'}</span><span>${esc(r.kind)}</span></div><h3>${esc(r.name)}</h3><p>${esc(r.address)}</p><div class="restaurant-meta">${r.cuisine?`<span>🍴 ${esc(r.cuisine.replaceAll(';','・'))}</span>`:''}${r.opening?`<span>🕒 ${esc(r.opening)}</span>`:''}</div><div class="event-actions"><a class="small-btn map" href="${mapsSearch(r.name+' '+r.address)}" target="_blank" rel="noopener">📍 Maps</a><a class="small-btn" href="${tabelogSearch(r.name+' '+r.address)}" target="_blank" rel="noopener">食べログ</a><button class="small-btn add-restaurant" data-add-restaurant="${i}" type="button">＋ 加入行程</button></div></article>`).join(''):'<div class="empty">暫時未有搜尋結果</div>';
+  $('#restaurantResults').innerHTML=restaurantResults.length?restaurantResults.map((r,i)=>`<article class="restaurant-card"><div class="restaurant-card-top"><span class="finder-badge">${r.distance<1?Math.round(r.distance*1000)+' m':r.distance.toFixed(1)+' km'}</span><span>${esc(r.kind)}</span></div><h3><a class="restaurant-name-link" href="${tabelogSearch(r.name+' '+r.address)}" target="_blank" rel="noopener" title="在新分頁用食べログ查看餐廳">${esc(r.name)} <span>↗</span></a></h3><p>${esc(r.address)}</p><div class="restaurant-meta">${r.cuisine?`<span>🍴 ${esc(r.cuisine.replaceAll(';','・'))}</span>`:''}${r.opening?`<span>🕒 ${esc(r.opening)}</span>`:''}</div><div class="event-actions"><a class="small-btn map" href="${mapsSearch(r.name+' '+r.address)}" target="_blank" rel="noopener">📍 Maps</a><a class="small-btn tabelog-btn" href="${tabelogSearch(r.name+' '+r.address)}" target="_blank" rel="noopener">🍽 睇食咩／食べログ</a><button class="small-btn add-restaurant" data-add-restaurant="${i}" type="button">＋ 加入行程</button></div></article>`).join(''):'<div class="empty">暫時未有搜尋結果</div>';
   $$('[data-add-restaurant]').forEach(b=>b.onclick=()=>addRestaurantToPlan(restaurantResults[Number(b.dataset.addRestaurant)]));
 }
 function addRestaurantToPlan(r){
